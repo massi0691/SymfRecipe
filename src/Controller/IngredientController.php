@@ -70,6 +70,15 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /** 
+     * This controller edit the ingredient
+     * @param Ingredient $ingredient     
+     * @param EntityManagerInterface $manager
+     * @param IngredientType $form
+     * @param Request $request
+     * @return Response 
+     */
     #[Route('/ingredient/edit/{id}', name: 'app_ingredient_edit', methods: ['GET', 'POST'])]
     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
     {
@@ -91,6 +100,13 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /** 
+     * This controller delete the ingredient
+     * @param Ingredient $ingredient     
+     * @param EntityManagerInterface $manager
+     * @return Response 
+     */
 
     #[Route('/ingredient/suppression/{id}', name: 'app_ingredient_delete', methods: ['GET', 'POST'])]
     public function delete(EntityManagerInterface $manager, Ingredient $ingredient): Response
