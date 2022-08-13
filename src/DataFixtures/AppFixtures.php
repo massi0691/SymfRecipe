@@ -53,27 +53,26 @@ class AppFixtures extends Fixture
             }
 
             $manager->persist($recette);
-
-            // Users
-
-            for ($l = 1; $l <= 10; $l++) {
-                $user = new User();
-
-                $user->setFullName($this->faker->name())
-                    ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
-                    ->setEmail($this->faker->email())
-                    ->setRoles(['ROLE USER'])
-
-                    ->setPlainPassword('password');
-
-
-
-
-                $manager->persist($user);
-            }
-
-
-            $manager->flush();
         }
+
+        // Users
+
+        for ($z = 1; $z <= 10; $z++) {
+            $user = new User();
+
+            $user->setFullName($this->faker->name())
+                ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
+                ->setEmail($this->faker->email())
+                ->setRoles(['ROLE USER'])
+                ->setPlainPassword('password');
+
+
+
+
+            $manager->persist($user);
+        }
+
+
+        $manager->flush();
     }
 }
