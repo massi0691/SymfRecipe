@@ -4,7 +4,11 @@
 <div class="container">
   <h1 class="mt-4">Formulaire de Connexion</h1>
 
-  {% if error %}
+  {% for message in app.flashes('success') %}
+  <div class="alert alert-success mt-4">
+    {{ message }}
+  </div>
+  {% endfor %} {% if error %}
   <div class="alert alert-danger mt-4">
     {{ error.messageKey|trans(error.messageData, 'security') }}
   </div>
@@ -18,7 +22,7 @@
         id="username"
         name="_username"
         placeholder="exemple@symrecipe.fr"
-        value="last_username"
+        value="{{ last_username }}"
       />
       <small id="emailHelp" class="form-text text-muted"
         >We'll never share your email with anyone else.</small
