@@ -3,14 +3,14 @@
 namespace App\DataFixtures;
 
 use App\Entity\Ingredient;
+use App\Entity\Mark;
 use App\Entity\Recette;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Generator;
 use Faker\Factory;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Validator\Constraints\Length;
+
 
 class AppFixtures extends Fixture
 {
@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
         }
 
         // Recettes
-
+        $recettes = [];
         for ($j = 1; $j <= 25; $j++) {
 
             $recette = new Recette();
@@ -52,12 +52,15 @@ class AppFixtures extends Fixture
             for ($k = 0; $k < mt_rand(5, 15); $k++) {
                 $recette->addIngredient($ingredients[mt_rand(0, count($ingredients) - 1)]);
             }
-
+            $recettes[] = $recette;
             $manager->persist($recette);
         }
 
-        // Users
 
+
+
+        // Users
+        $users = [];
         for ($z = 1; $z <= 10; $z++) {
             $user = new User();
 
@@ -66,11 +69,21 @@ class AppFixtures extends Fixture
                 ->setEmail($this->faker->email())
                 ->setRoles(['ROLE USER'])
                 ->setPlainPassword('password');
-
-
-
-
+            $users[] = $user;
             $manager->persist($user);
+        }
+
+
+        // set Marks
+
+        foreach ($recettes as $recette) {
+            for ($i = 0; $i < mt_rand(0, 4); $i++) {
+                $mark = new Mark();
+                $mark->setMark(mt_rand(1, 5))
+                    ->setUser($users[mt_rand(0, count($users) - 1)])
+                    ->setRecipe($recette);
+                $manager->persist($mark);
+            }
         }
 
 
