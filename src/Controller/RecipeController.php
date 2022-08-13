@@ -7,7 +7,10 @@ use App\Form\RecipeType;
 use App\Repository\RecetteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Response\ResponseStream;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +25,7 @@ class RecipeController extends AbstractController
      * @param Request $request
      * @return Response
      */
-
+    #[IsGranted('ROLE_USER')]
     #[Route('/recette', name: 'app_recipe', methods: ["GET"])]
     public function index(RecetteRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -35,6 +38,38 @@ class RecipeController extends AbstractController
             'recipes' => $recipes
         ]);
     }
+
+
+    #[Route("/recette/publique", name: "app_recipe_public", methods: ['GET'])]
+    public function indexPublic(RecetteRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $recipes = $paginator->paginate(
+            $repository->findPublicRecipe(null),
+            $request->query->getInt('page', 1),
+            10
+        );
+        return $this->render("pages/recipe/index_public.html.twig", [
+            'recipes' => $recipes
+        ]);
+    }
+
+    /**
+     * This Controller allow us to see recipe if this one is public
+     *
+     * @param Recette $recipe
+     * @return Response
+     */
+
+    #[Security("is_granted('ROLE_USER') and recipe.isIsPublic() === true ")]
+    #[Route("/recette/{id}", name: "app_recipe_show", methods: ['GET'])]
+
+    public function show(Recette $recipe): Response
+    {
+        return $this->render("pages/recipe/show.html.twig", [
+            'recipe' => $recipe
+        ]);
+    }
+
 
     /**
      * This Controller  add new recipe
