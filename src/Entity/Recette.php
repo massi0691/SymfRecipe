@@ -60,6 +60,9 @@ class Recette
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $createdAt = null;
 
+
+    private ?float $average = null;
+
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredients;
 
@@ -245,5 +248,24 @@ class Recette
         }
 
         return $this;
+    }
+
+
+    public function getAverage()
+    {
+        $marks = $this->marks;
+        if ($marks->toArray() === []) {
+            $this->average = null;
+            return $this->average;
+        }
+        $total = 0;
+
+        foreach ($marks as $mark) {
+            $total += $mark->getMark();
+        }
+        $this->average = $total / count($marks);
+
+
+        return $this->average;
     }
 }
