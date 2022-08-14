@@ -2,17 +2,16 @@
 endblock %} {% block body %}
 
 <div class="container mt-4">
-  {% if not recipes.items is same as([]) %}
   <h1>Mes Recettes:</h1>
-  {% for message in app.flashes('success') %}
-  <div class="alert alert-success">
-    {{ message }}
-  </div>
-  {% endfor %}
   <a href="{{ path('app_recipe_new') }}" class="btn btn-primary"
     >Ajouter une recette
   </a>
-  {# {% for message in app.flashes('success') %}
+  {% if not recipes.items is same as([]) %} {% for message in
+  app.flashes('success') %}
+  <div class="alert alert-success">
+    {{ message }}
+  </div>
+  {% endfor %} {# {% for message in app.flashes('success') %}
   <div class="alert alert-success mt-4">
     {{ message }}
   </div>

@@ -32,7 +32,7 @@ class RecipeController extends AbstractController
     public function index(RecetteRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $recipes = $paginator->paginate(
-            $repository->findAll(), /* query NOT result */
+            $repository->findBy(['user' => $this->getUser()]), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             10 /*limit per page*/
         );
@@ -63,6 +63,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/recette/creation', name: 'app_recipe_new', methods: ['GET', 'POST'])]
 
     public function add(Request $request, EntityManagerInterface $manager): Response
@@ -73,6 +74,7 @@ class RecipeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $recette = $form->getData();
+            $recette->setUser($this->getUser());
             $manager->persist($recette);
             $manager->flush();
             $this->addFlash(
@@ -137,12 +139,8 @@ class RecipeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
-
-
-
-
     #[Route('/recette/edit/{id}', name: 'app_recipe_edit', methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_USER') and user === recette.getUser()")]
     /**
      * This Controller allow us to edit the Recipe
      * @param Recette $recette
@@ -170,6 +168,8 @@ class RecipeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+
 
     #[Route('/recette/suppression/{id}', name: 'app_recipe_delete', methods: ['GET'])]
     /**

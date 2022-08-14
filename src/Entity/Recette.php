@@ -82,14 +82,12 @@ class Recette
 
     private ?float $average = null;
 
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredients;
-
-    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Mark::class, orphanRemoval: true)]
-    private Collection $marks;
-
-    #[ORM\OneToMany(mappedBy: 'recette', targetEntity: User::class)]
-    private Collection $user;
 
 
     public function __construct()
@@ -98,7 +96,6 @@ class Recette
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->marks = new ArrayCollection();
-        $this->user = new ArrayCollection();
     }
     #[ORM\PrePersist]
     public function setUpdatedAtValue()
@@ -255,29 +252,7 @@ class Recette
         return $this;
     }
 
-    /**
-     * @return Collection<int, Ingredient>
-     */
-    public function getIngredients(): Collection
-    {
-        return $this->ingredients;
-    }
 
-    public function addIngredient(Ingredient $ingredient): self
-    {
-        if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients->add($ingredient);
-        }
-
-        return $this;
-    }
-
-    public function removeIngredient(Ingredient $ingredient): self
-    {
-        $this->ingredients->removeElement($ingredient);
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Mark>
@@ -328,32 +303,38 @@ class Recette
         return $this->average;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUser(): Collection
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function addUser(User $user): self
+    public function setUser(?User $user): self
     {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-            $user->setRecette($this);
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ingredient>
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients->add($ingredient);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeIngredient(Ingredient $ingredient): self
     {
-        if ($this->user->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getRecette() === $this) {
-                $user->setRecette(null);
-            }
-        }
+        $this->ingredients->removeElement($ingredient);
 
         return $this;
     }

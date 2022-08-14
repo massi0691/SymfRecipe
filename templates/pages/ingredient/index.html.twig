@@ -15,7 +15,7 @@ endblock %} {% block body %}
   {% endfor %} {% if not ingredients.items is same as([]) %}
   <div class="count mt-4 h4">
     Il y'a {{ ingredients.getTotalItemCount }}
-    ingrédients au total.
+    ingrédient(s) au total.
   </div>
 
   <table class="table table-hover">
@@ -34,7 +34,7 @@ endblock %} {% block body %}
       <tr class="table-primary mt-4">
         <th scope="row">{{ ingredient.id }}</th>
         <td>{{ ingredient.name }}</td>
-        <td>{{ ingredient.price }}</td>
+        <td>{{ ingredient.price|number_format(2) }} €</td>
         <td>{{ ingredient.createdAt|date('d/m/Y') }}</td>
         <td>
           <a
@@ -61,7 +61,7 @@ endblock %} {% block body %}
     {{ knp_pagination_render(ingredients) }}
   </div>
   {% else %}
-  <h1>Il y'a pas d'ingrédients!</h1>
+  <h1>Il y'a pas d'ingrédient(s)!</h1>
 
   {% endif %}
 </div>
