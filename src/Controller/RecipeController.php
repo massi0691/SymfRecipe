@@ -56,13 +56,46 @@ class RecipeController extends AbstractController
     }
 
     /**
+     * This Controller  add new recipe
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+
+    #[Route('/recette/creation', name: 'app_recipe_new', methods: ['GET', 'POST'])]
+
+    public function add(Request $request, EntityManagerInterface $manager): Response
+    {
+        $recette = new Recette();
+        $form = $this->createForm(RecipeType::class, $recette);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recette = $form->getData();
+            $manager->persist($recette);
+            $manager->flush();
+            $this->addFlash(
+                'success',
+                'Votre recette à été créer avec succés !'
+            );
+            return $this->redirectToRoute("app_recipe");
+        }
+        return $this->render('pages/recipe/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+
+
+    /**
      * This Controller allow us to see recipe if this one is public
      *
      * @param Recette $recipe
      * @return Response
      */
 
-    #[Security("is_granted('ROLE_USER') and recipe.isIsPublic() === true ")]
+    #[Security("is_granted('ROLE_USER')")]
     #[Route("/recette/{id}", name: "app_recipe_show", methods: ['GET', 'POST'])]
 
     public function show(
@@ -106,33 +139,7 @@ class RecipeController extends AbstractController
     }
 
 
-    /**
-     * This Controller  add new recipe
-     * @param EntityManagerInterface $manager       
-     * @param Request $request
-     * @return Response
-     */
-    #[Route('/recette/creation', name: 'app_recipe_new', methods: ["GET", "POST"])]
-    public function new(Request $request, EntityManagerInterface $manager): Response
-    {
-        $recette = new Recette();
-        $form = $this->createForm(RecipeType::class, $recette);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $recette = $form->getData();
-            $manager->persist($recette);
-            $manager->flush();
-            $this->addFlash(
-                'success',
-                'Votre recette à été créer avec succés !'
-            );
-            return $this->redirectToRoute("app_recipe");
-        }
-        return $this->render('pages/recipe/new.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
 
 
     #[Route('/recette/edit/{id}', name: 'app_recipe_edit', methods: ['GET', 'POST'])]

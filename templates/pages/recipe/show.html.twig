@@ -10,6 +10,15 @@
   {% endfor %}
   <h4 class="mt-4">{{ recipe.name }}</h4>
 
+  <div class="recipe_image">
+    <img
+      style="max-width: 500px"
+      src="{{ vich_uploader_asset(recipe, 'imageFile') }}"
+      alt=""
+      srcset=""
+    />
+  </div>
+
   <p>
     la moyenne de cette de recette est de
     {{ recipe.average|number_format(2) }} /5

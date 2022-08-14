@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class RecipeType extends AbstractType
 {
@@ -129,6 +130,16 @@ class RecipeType extends AbstractType
                 'constraints' => [
                     new Assert\NotNull()
                 ]
+            ])
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Image de la recette',
+                'label_attr' => [
+                    'class' => 'form-label mt-4'
+                ],
+                'allow_delete' => false,
+                'download_uri' => false,
+                'download_label' => ''
+
             ])
             ->add('ingredients', EntityType::class, [
                 'label' => 'Les ingrédients',

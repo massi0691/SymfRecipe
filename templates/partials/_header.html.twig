@@ -1,36 +1,56 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarColor01"
-      aria-controls="navbarColor01"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_home') }}"
             >Accueil
           </a>
-        </li>
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link" href="{{ path('app_recipe_public') }}"
+            >Recettes de la communeauté
+          </a>
+        </li>  
+        {% if  is_granted('ROLE_USER') %}
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_ingredient') }}"
             >ingrédients
           </a>
         </li>
-
+       
         <li class="nav-item">
           <a class="nav-link" href="{{ path('app_recipe') }}"
             >Recettes
           </a>
         </li>
-       
+        {% endif %}
     </div>
+
+    <ul class="navbar-nav ">
+      {% if  is_granted('ROLE_USER') %}
+      <li class="nav-right dropdown  ">
+        <a class="nav-link dropdown-toggle me-sm-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.fullName}}</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item pr-4"href="{{ path('app_security_logout') }}">Déconnexion</a>
+          <a class="dropdown-item pr-4"href="{{ path('app_user_edit', {'id':app.user.id }) }}">Modifier utilisateur</a>
+          <a class="dropdown-item pr-4"href="{{ path('app_user_edit_password', {'id':app.user.id }) }}">Modifier mdp</a>
+
+         
+        </div>
+      </li>
+      {% else %}
+      
+
+      
+      <li class="nav-item d-flex">
+        <a class="nav-link" href="{{ path('app_security_login')}}">Connexion |</a>  <a class="nav-link" href="{{ path('app_security_register')}}">Inscription</a>
+
+      </li>
+    
+
+
+    {% endif %}
+
+    </ul>
   </div>
 </nav>

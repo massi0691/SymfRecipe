@@ -58,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Mark::class, orphanRemoval: true)]
     private Collection $marks;
 
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    private ?Recette $recette = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -210,6 +213,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $mark->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRecette(): ?Recette
+    {
+        return $this->recette;
+    }
+
+    public function setRecette(?Recette $recette): self
+    {
+        $this->recette = $recette;
 
         return $this;
     }
