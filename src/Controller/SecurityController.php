@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Mail;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -62,6 +63,17 @@ class SecurityController extends AbstractController
 
             $manager->persist($user);
             $manager->flush();
+
+            //send email 
+            $content = 'Bonjour' . $user->getFullName() . '<br>' . 'Bienvenue sur le site symrecipe. Vous pouvez dis a présent de créer vos ingédeints et vos recettes et les partager dans la communauté.';
+            $mail = new Mail();
+            $mail->send($user->getEmail(), $user->getFullName(), 'Bienvenue sur Symrecipe!', $content);
+
+            $this->addFlash(
+                'success',
+                'un email vous à été envoyer'
+
+            );
 
             return $this->redirectToRoute("app_security_login");
         }
