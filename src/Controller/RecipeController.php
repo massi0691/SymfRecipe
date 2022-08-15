@@ -97,8 +97,9 @@ class RecipeController extends AbstractController
      * @return Response
      */
 
-    #[Security("is_granted('ROLE_USER')")]
     #[Route("/recette/{id}", name: "app_recipe_show", methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_USER') and (user === recipe.getUser() || recipe.isIsPublic() === true) ")]
+
 
     public function show(
         Recette $recipe,
@@ -172,6 +173,8 @@ class RecipeController extends AbstractController
 
 
     #[Route('/recette/suppression/{id}', name: 'app_recipe_delete', methods: ['GET'])]
+    #[Security("is_granted('ROLE_USER') and user === recette.getUser()")]
+
     /**
      * This controller allow us to delete recipe selected
      *

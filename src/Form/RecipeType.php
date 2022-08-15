@@ -152,9 +152,12 @@ class RecipeType extends AbstractType
 
             ])
             ->add('ingredients', EntityType::class, [
+                'attr' => [
+                    'class' => 'd-flex mr-4'
+                ],
                 'label' => 'Les ingrédients',
                 'label_attr' => [
-                    'class' => 'form-label mt-4'
+                    'class' => 'form-label mt-4 '
                 ],
                 'class' => Ingredient::class,
                 'query_builder' => function (IngredientRepository $rep) {

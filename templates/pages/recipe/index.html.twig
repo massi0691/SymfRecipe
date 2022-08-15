@@ -18,7 +18,7 @@ endblock %} {% block body %}
   {% endfor %} #}
   <div class="count mt-4 h4">
     Il y'a {{ recipes.getTotalItemCount }}
-    Recettes au total.
+    Recette(s) au total.
   </div>
 
   <table class="table table-hover">
@@ -38,7 +38,10 @@ endblock %} {% block body %}
       <tr class="table-primary mt-4">
         <th scope="row">{{ recipe.id }}</th>
         <td>{{ recipe.name }}</td>
-        <td>{{ recipe.price != null ? recipe.price : "Non rensigné" }}</td>
+        <td>
+          {{ recipe.price != null ? recipe.price|number_format(2)  : "Non rensigné" }}
+          €
+        </td>
         <td>
           {{ recipe.difficulty != null ? recipe.difficulty : "Non rensigné" }}
         </td>
@@ -70,7 +73,7 @@ endblock %} {% block body %}
     {{ knp_pagination_render(recipes) }}
   </div>
   {% else %}
-  <h1>Il y'a pas de recettes!</h1>
+  <h1>Il y'a pas de recette(s)!</h1>
 
   {% endif %}
 </div>

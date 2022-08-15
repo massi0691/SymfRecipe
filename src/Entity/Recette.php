@@ -89,6 +89,9 @@ class Recette
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredients;
 
+    #[ORM\ManyToMany(targetEntity: Mark::class)]
+    private Collection $marks;
+
 
     public function __construct()
     {
