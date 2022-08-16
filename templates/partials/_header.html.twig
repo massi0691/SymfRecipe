@@ -38,6 +38,10 @@
         <a class="nav-link dropdown-toggle me-sm-2" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.fullName}}</a>
         <div class="dropdown-menu">
           <a class="dropdown-item pr-4"href="{{ path('app_security_logout') }}">Déconnexion</a>
+
+          {% if 'ROLE_ADMIN' in app.user.roles %}
+          <a class="dropdown-item pr-4"href="{{ path('admin_index') }}">Administration</a>
+          {% endif %} 
           <a class="dropdown-item pr-4"href="{{ path('app_user_edit', {'id':app.user.id }) }}">Modifier utilisateur</a>
           <a class="dropdown-item pr-4"href="{{ path('app_user_edit_password', {'id':app.user.id }) }}">Modifier mdp</a>
 
