@@ -19,7 +19,7 @@ security:
       form_login:
         login_path: app_security_login
         check_path: app_security_login
-        default_target_path: app_recipe_new
+        default_target_path: app_home
       logout:
         path: app_security_logout
 
