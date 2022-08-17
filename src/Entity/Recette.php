@@ -256,7 +256,6 @@ class Recette
     }
 
 
-
     /**
      * @return Collection<int, Mark>
      */
