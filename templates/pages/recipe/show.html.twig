@@ -30,7 +30,7 @@
   </div>
 
   {% if recipe.time %}
-  <p class="mt-4">Temps (en minutes) : {{ recipe.time }}</p>
+  <p class="mt-4">Temps (en minutes) : {{ recipe.time | min_to_hour }}</p>
   {% else %}
   <p class="mt-4">Temps non rensigné</p>
   {% endif %} {% if recipe.nbPeople %}
